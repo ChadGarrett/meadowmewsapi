@@ -18,7 +18,8 @@ namespace MeadowMewsApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration) {
+        public Startup(IConfiguration configuration)
+        {
             Configuration = configuration;
         }
 
@@ -37,7 +38,7 @@ namespace MeadowMewsApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MeadowMewsApi", Version = "v1" });
             });
 
-            services.AddDbContext<LevyStatementContext>(options => 
+            services.AddDbContext<LevyStatementContext>(options =>
                     options.UseInMemoryDatabase("LevyStatementContext"));
 
             services.AddDbContext<ElectricityStatementContext>(options =>
@@ -45,6 +46,12 @@ namespace MeadowMewsApi
 
             services.AddDbContext<WaterStatementContext>(options =>
                     options.UseInMemoryDatabase("WaterStatementContext"));
+
+            services.AddDbContext<HouseholdContext>(options =>
+                    options.UseInMemoryDatabase("HouseholdContext"));
+
+            services.AddDbContext<UserContext>(options =>
+                    options.UseInMemoryDatabase("UserContext"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

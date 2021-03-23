@@ -22,14 +22,16 @@ namespace MeadowMewsApi.Controllers
 
         // GET: api/WaterStatements
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<WaterStatement>>> GetWaterStatement()
+        public async Task<ActionResult<IEnumerable<WaterStatementDTO>>> GetWaterStatement()
         {
-            return await _context.WaterStatement.ToListAsync();
+            return await _context.WaterStatement
+                .Select(x => ItemToDTO(x))
+                .ToListAsync();
         }
 
         // GET: api/WaterStatements/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<WaterStatement>> GetWaterStatement(long id)
+        public async Task<ActionResult<WaterStatementDTO>> GetWaterStatement(long id)
         {
             var waterStatement = await _context.WaterStatement.FindAsync(id);
 
@@ -38,35 +40,37 @@ namespace MeadowMewsApi.Controllers
                 return NotFound();
             }
 
-            return waterStatement;
+            return ItemToDTO(waterStatement);
         }
 
         // PUT: api/WaterStatements/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutWaterStatement(long id, WaterStatement waterStatement)
+        public async Task<IActionResult> PutWaterStatement(long id, WaterStatementDTO waterStatementDto)
         {
-            if (id != waterStatement.Id)
+            if (id != waterStatementDto.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(waterStatement).State = EntityState.Modified;
+            var waterStatement = await _context.WaterStatement.FindAsync(id);
+
+            if (waterStatement == null)
+            {
+                return NotFound();
+            }
+
+            waterStatement.Date = waterStatement.Date;
+            waterStatement.Amount = waterStatementDto.Amount;
+            waterStatement.Paid = waterStatement.Paid;
 
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException) when (!WaterStatementExists(id))
             {
-                if (!WaterStatementExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return NoContent();
@@ -75,12 +79,23 @@ namespace MeadowMewsApi.Controllers
         // POST: api/WaterStatements
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<WaterStatement>> PostWaterStatement(WaterStatement waterStatement)
+        public async Task<ActionResult<WaterStatementDTO>> PostWaterStatement(WaterStatementDTO waterStatementDto)
         {
+            var waterStatement = new WaterStatement
+            {
+                HouseholdId = waterStatementDto.HouseholdId,
+                Date = waterStatementDto.Date,
+                Amount = waterStatementDto.Amount,
+                Paid = waterStatementDto.Paid,
+            };
+            
             _context.WaterStatement.Add(waterStatement);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetWaterStatement", new { id = waterStatement.Id }, waterStatement);
+            return CreatedAtAction(
+                nameof(GetWaterStatement), 
+                new { id = waterStatement.Id }, 
+                ItemToDTO(waterStatement));
         }
 
         // DELETE: api/WaterStatements/5
@@ -99,9 +114,20 @@ namespace MeadowMewsApi.Controllers
             return NoContent();
         }
 
+        // Helpers
         private bool WaterStatementExists(long id)
         {
             return _context.WaterStatement.Any(e => e.Id == id);
         }
+
+        // Mappers
+        private static WaterStatementDTO ItemToDTO(WaterStatement waterStatement) => new WaterStatementDTO
+        {
+            Id = waterStatement.Id,
+            HouseholdId = waterStatement.HouseholdId,
+            Date = waterStatement.Date,
+            Amount = waterStatement.Amount,
+            Paid = waterStatement.Paid,
+        };
     }
 }
