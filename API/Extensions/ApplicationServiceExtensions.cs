@@ -3,6 +3,7 @@ using API.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using API.Services;
 
 namespace API.Extensions
 {
@@ -12,6 +13,7 @@ namespace API.Extensions
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            services.AddScoped<ITokenService, TokenService>();
 
             services.AddDbContext<DataContext>(options =>
             {
