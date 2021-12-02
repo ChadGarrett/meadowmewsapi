@@ -16,6 +16,8 @@ namespace API.Helpers
             // AppUser MemberDto
 
             CreateMap<RegisterDto, AppUser>();
+            CreateMap<Property, PropertyDto>();
+            CreateMap<AppUser, AppUserDto>();
         }
     }
 }

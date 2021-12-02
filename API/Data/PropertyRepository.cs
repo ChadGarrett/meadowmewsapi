@@ -35,7 +35,9 @@ namespace API.Data
 
         public async Task<Property> GetProperty(int id)
         {
-            return await _context.properties.FindAsync(id);
+            return await _context.properties
+                .Include(u => u.AppUser)
+                .SingleOrDefaultAsync(p => p.Id == id);
         }
 
         public void TransferProperty(Property property, AppUser receivingUser)

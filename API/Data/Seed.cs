@@ -19,10 +19,7 @@ namespace API.Data
         public static async Task SeedUsers(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
         {
             // Don't seed if there is already users
-            if (await userManager.Users.AnyAsync())
-            {
-                return;
-            }
+            if (await userManager.Users.AnyAsync()) return;
 
             var userData = await System.IO.File.ReadAllTextAsync("Data/UserSeedData.json");
             var users = JsonSerializer.Deserialize<List<AppUser>>(userData);
@@ -58,22 +55,30 @@ namespace API.Data
 
         public static async Task SeedElectricityPurchases(DataContext context)
         {
-            // if (await context.electricityPurchases.AnyAsync()) return;
+            if (await context.electricityPurchases.AnyAsync()) return;
             
-            var userData = await System.IO.File.ReadAllTextAsync("Data/ElectricitySeedData.json");
-            var purchases = JsonSerializer.Deserialize<List<ElectricityPurchase>>(userData);
-            if (purchases == null) 
-            {
-                Console.Write("NO purchases to add.");
-                return;
-            }
-
-            // await context.electricityPurchases.AddRangeAsync(purchases);
+            var purchaseData = await System.IO.File.ReadAllTextAsync("Data/ElectricitySeedData.json");
+            var purchases = JsonSerializer.Deserialize<List<ElectricityPurchase>>(purchaseData);
+            if (purchases == null) return;
 
             foreach (var purchase in purchases)
             {
                 await context.electricityPurchases.AddAsync(purchase);
             }
+
+            await context.SaveChangesAsync();
+        }
+
+        public static async Task SeedProperties(DataContext context)
+        {
+            if (await context.properties.AnyAsync()) return;
+
+            var propertyData = await System.IO.File.ReadAllTextAsync("Data/PropertySeedData.json");
+            var properties = JsonSerializer.Deserialize<List<Property>>(propertyData);
+
+            if (properties == null) return;
+
+            await context.properties.AddRangeAsync(properties);
 
             await context.SaveChangesAsync();
         }

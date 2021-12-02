@@ -11,7 +11,7 @@ namespace API.Helpers
 
         public static int GetUserId(this ClaimsPrincipal user)
         {
-            return int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
+            return int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value);
         }
     }
 }

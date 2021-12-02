@@ -1,0 +1,24 @@
+[
+    {
+        "Id": 1,
+        "AppUserId": 1,
+        "Unit": "41",
+        "ComplexName": "Meadow Mews",
+        "Street": "44 Meadow Avenue",
+        "Suburb": "Equestria",
+        "City": "Pretoria",
+        "Province": "Gauteng",
+        "PostalCode": "0184"
+    },
+    {
+        "Id": 2,
+        "AppUserId": 1,
+        "Unit": "21",
+        "ComplexName": "Seabiscuit",
+        "Street": "120 Griffiths Avenue",
+        "Suburb": "Equestria",
+        "City": "Pretoria",
+        "Province": "Gauteng",
+        "PostalCode": "0184"
+    }
+]

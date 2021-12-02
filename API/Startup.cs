@@ -14,7 +14,7 @@ using Microsoft.OpenApi.Models;
 using API.Extensions;
 using API.Middleware;
 
-namespace MeadowMewsApi
+namespace API
 {
     public class Startup
     {

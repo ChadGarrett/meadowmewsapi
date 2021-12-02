@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace MeadowMewsApi
+namespace API
 {
     public class Program
     {
@@ -31,6 +31,7 @@ namespace MeadowMewsApi
                 // Seed
                 await Seed.SeedUsers(userManager, roleManager);
                 await Seed.SeedElectricityPurchases(context);
+                await Seed.SeedProperties(context);
             }
             catch (Exception ex)
             {

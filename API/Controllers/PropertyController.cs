@@ -2,20 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.DTOs;
 using API.Entities;
 using API.Helpers;
 using API.Interfaces;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    // [Authorize]
     public class PropertyController : BaseApiController
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public PropertyController(IUnitOfWork unitOfWork)
+        public PropertyController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         ///////////////
@@ -31,9 +37,22 @@ namespace API.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<Property> GetProperty(int id)
+        public async Task<PropertyDto> GetProperty(int id)
         {
-            return await _unitOfWork.propertyRepository.GetProperty(id);
+            var property = await _unitOfWork.propertyRepository.GetProperty(id);
+
+            return new PropertyDto
+            {
+                Id = property.Id,
+                AppUserDto = _mapper.Map<AppUserDto>(property.AppUser),
+                Unit = property.Unit,
+                ComplexName = property.ComplexName,
+                Street = property.Street,
+                Suburb = property.Suburb,
+                City = property.City,
+                Province = property.Province,
+                PostalCode = property.PostalCode
+            };
         }
 
         [HttpPost]

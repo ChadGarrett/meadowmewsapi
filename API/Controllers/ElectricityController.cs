@@ -6,7 +6,7 @@ using API.Interfaces;
 using API.Entities;
 using Microsoft.AspNetCore.Authorization;
 
-namespace MeadowMewsApi.Controllers
+namespace API.Controllers
 {
     [Authorize]
     public class ElectricityController : BaseApiController

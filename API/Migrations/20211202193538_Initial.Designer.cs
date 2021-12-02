@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeadowMewsApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20211202174959_Properties")]
-    partial class Properties
+    [Migration("20211202193538_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
