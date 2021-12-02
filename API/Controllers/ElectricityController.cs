@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 namespace MeadowMewsApi.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
-    [ApiController]
     public class ElectricityController : BaseApiController
     {
         private readonly IUnitOfWork _unitOfWork;

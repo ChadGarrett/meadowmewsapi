@@ -13,6 +13,7 @@ namespace API.Data
         }
 
         public IElectricityRepository electricityRepository => new ElectricityRepository(_context);
+        public IPropertyRepository propertyRepository => new PropertyRepository(_context);
 
         public async Task<bool> Complete()
         {

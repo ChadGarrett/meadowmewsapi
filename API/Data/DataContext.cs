@@ -25,5 +25,23 @@ namespace API.Data
         
         public DbSet<ElectricityPurchase> electricityPurchases { get; set; }
         public DbSet<AppUser> appUsers { get; set; }
+        public DbSet<Property> properties { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<AppUser>()
+                .HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.User)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
+
+            builder.Entity<AppRole>()
+                .HasMany(ur => ur.UserRoles)
+                .WithOne(u => u.Role)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
+        }
     }
 }

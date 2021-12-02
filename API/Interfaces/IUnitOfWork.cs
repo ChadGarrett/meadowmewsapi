@@ -9,6 +9,7 @@ namespace API.Interfaces
          ///////////
 
          IElectricityRepository electricityRepository { get; }
+         IPropertyRepository propertyRepository { get; }
          
          /////////////
          // Helpers //
