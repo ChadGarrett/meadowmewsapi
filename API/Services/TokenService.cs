@@ -36,7 +36,7 @@ private readonly UserManager<AppUser> _userManager;
             var roles = await _userManager.GetRolesAsync(user);
 
             // Add the users roles to the claims
-            claims.AddRange(roles.Select(roles => new Claim(ClaimTypes.Role, role)));
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 

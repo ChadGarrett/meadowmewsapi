@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using API.Controllers;
 using API.Interfaces;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MeadowMewsApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ElectricityController : BaseApiController

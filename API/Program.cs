@@ -28,8 +28,7 @@ namespace MeadowMewsApi
 
                 await context.Database.MigrateAsync();
 
-                // TODO
-                // Seed database
+                await Seed.SeedUsers(userManager, roleManager);
             }
             catch (Exception ex)
             {

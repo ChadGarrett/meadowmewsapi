@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
@@ -44,7 +45,7 @@ namespace API.Controllers
                 return BadRequest(result.Errors);
             }
 
-            var roleResult = await _userManager.AddToRoleAsync(user, "Member");
+            var roleResult = await _userManager.AddToRoleAsync(user, AppRoleType.Member.ToString());
 
             if (!roleResult.Succeeded)
             {
@@ -53,6 +54,7 @@ namespace API.Controllers
 
             return new UserDto
             {
+                UserName = user.UserName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
@@ -81,6 +83,7 @@ namespace API.Controllers
 
             return new UserDto 
             {
+                UserName = user.UserName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
