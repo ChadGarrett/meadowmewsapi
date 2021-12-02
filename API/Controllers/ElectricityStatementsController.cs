@@ -1,37 +1,35 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MeadowMewsApi.Models;
+using API.Controllers;
+using API.Interfaces;
+using API.Entities;
 
 namespace MeadowMewsApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ElectricityStatementsController : ControllerBase
+    public class ElectricityStatementsController : BaseApiController
     {
-        private readonly ElectricityStatementContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ElectricityStatementsController(ElectricityStatementContext context)
+        public ElectricityStatementsController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
-        // GET: api/ElectricityStatements
+        // GET: api/ElectricityStatements/GetStatements
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ElectricityStatement>>> GetElectricityStatement()
+        public async Task<IEnumerable<ElectricityPurchase>> GetStatements()
         {
-            return await _context.ElectricityStatement.ToListAsync();
+            return await _unitOfWork.electricityRepository.GetPurchases();
         }
 
-        // GET: api/ElectricityStatements/5
+        // GET: api/ElectricityStatements/GetStatements/1
         [HttpGet("{id}")]
-        public async Task<ActionResult<ElectricityStatement>> GetElectricityStatement(long id)
+        public async Task<ActionResult<ElectricityPurchase>> GetStatement(int id)
         {
-            var electricityStatement = await _context.ElectricityStatement.FindAsync(id);
+            var electricityStatement = await _unitOfWork.electricityRepository.GetPurchase(id);
 
             if (electricityStatement == null) 
             {
@@ -41,66 +39,37 @@ namespace MeadowMewsApi.Controllers
             return electricityStatement;
         }
 
-        // PUT: api/ElectricityStatements/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutElectricityStatement(long id, ElectricityStatement electricityStatement)
-        {
-            if (id != electricityStatement.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(electricityStatement).State = EntityState.Modified;
-
-            try {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ElectricityStatementExists(id))
-                {
-                    return NotFound();
-                }
-                else {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/ElectricityStatements
+        // POST: api/ElectricityStatements/AddPurchase
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ElectricityStatement>> PostElectricityStatement(ElectricityStatement electricityStatement)
+        public async Task<ActionResult<ElectricityPurchase>> AddPurchase(ElectricityPurchase electricityPurchase)
         {
-            await _context.ElectricityStatement.AddAsync(electricityStatement);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.electricityRepository.AddPurchase(electricityPurchase);
 
-            return CreatedAtAction(nameof(GetElectricityStatement), new { id = electricityStatement.Id }, electricityStatement);
+            if (await _unitOfWork.Complete()) 
+            {
+                return CreatedAtAction(nameof(GetStatement), new { id = electricityPurchase.Id }, electricityPurchase);
+            }
+
+            return BadRequest("Failed to add a new Electricity Purchase");
         }
 
-        // DELETE: api/ElectricityStatements/5
+        // DELETE: api/ElectricityStatements/DeleteStatement/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteElectricityStatement(long id)
+        public async Task<IActionResult> DeleteStatement(int id)
         {
-            var electricityStatement = await _context.ElectricityStatement.FindAsync(id);
-            
-            if (electricityStatement == null) 
+            var purchase = await _unitOfWork.electricityRepository.GetPurchase(id);
+
+            if (purchase == null)
             {
                 return NotFound();
             }
+            
+            _unitOfWork.electricityRepository.DeletePurchase(purchase);
+            
+            if (await _unitOfWork.Complete()) return NoContent();
 
-            _context.ElectricityStatement.Remove(electricityStatement);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool ElectricityStatementExists(long id)
-        {
-            return _context.ElectricityStatement.Any(e => e.Id == id);
+            return BadRequest("Unable to delete Electricity Purchase");
         }
     }
 }
