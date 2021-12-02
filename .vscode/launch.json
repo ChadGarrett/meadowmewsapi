@@ -10,9 +10,10 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/bin/Debug/net5.0/MeadowMewsApi.dll",
+            // "program": "${workspaceFolder}/API/bin/Debug/net5.0/API.dll",
+            "program": "${workspaceFolder}/API/bin/Debug/net5.0/MeadowMewsApi.dll",
             "args": [],
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/API",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
