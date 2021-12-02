@@ -28,7 +28,9 @@ namespace MeadowMewsApi
 
                 await context.Database.MigrateAsync();
 
+                // Seed
                 await Seed.SeedUsers(userManager, roleManager);
+                await Seed.SeedElectricityPurchases(context);
             }
             catch (Exception ex)
             {

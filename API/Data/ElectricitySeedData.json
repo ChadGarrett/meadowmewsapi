@@ -1,0 +1,20 @@
+[
+    {
+        "PurchaseDate": "2021-11-03",
+        "PurchasedBy": "Chad Garrett",
+        "Units": 178.00,
+        "Value": 500
+    },
+    {
+        "PurchaseDate": "2021-11-04",
+        "PurchasedBy": "Chad Garrett",
+        "Units": 192.60,
+        "Value": 500
+    },
+    {
+        "PurchaseDate": "2021-11-05",
+        "PurchasedBy": "Chad Garrett",
+        "Units": 177.10,
+        "Value": 500
+    }
+]
