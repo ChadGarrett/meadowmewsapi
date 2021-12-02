@@ -28,7 +28,7 @@ namespace API.Controllers
         // Endpoints //
         ///////////////
 
-        [HttpGet("owned/id")]
+        [HttpGet("owned/{id}")]
         public async Task<IEnumerable<Property>> GetOwnedProperties(int id)
         {
             var appUserId = User.GetUserId();
@@ -36,7 +36,7 @@ namespace API.Controllers
             return await _unitOfWork.propertyRepository.GetOwnedProperties(id);
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<PropertyDto> GetProperty(int id)
         {
             var property = await _unitOfWork.propertyRepository.GetProperty(id);
