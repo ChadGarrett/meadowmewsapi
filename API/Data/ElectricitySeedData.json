@@ -1,20 +1,26 @@
 [
     {
+        "Id": 1,
         "PurchaseDate": "2021-11-03",
         "PurchasedBy": "Chad Garrett",
         "Units": 178.00,
-        "Value": 500
+        "Value": 500,
+        "PropertyId": 1
     },
     {
+        "Id": 2,
         "PurchaseDate": "2021-11-04",
         "PurchasedBy": "Chad Garrett",
         "Units": 192.60,
-        "Value": 500
+        "Value": 500,
+        "PropertyId": 1
     },
     {
+        "Id": 3,
         "PurchaseDate": "2021-11-05",
         "PurchasedBy": "Chad Garrett",
         "Units": 177.10,
-        "Value": 500
+        "Value": 500,
+        "PropertyId": 2
     }
 ]

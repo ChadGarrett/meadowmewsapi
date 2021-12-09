@@ -9,7 +9,7 @@ namespace API.DTOs
     public class PropertyDto
     {
         public int Id { get; set; }
-        public AppUserDto AppUserDto { get; set; }
+        public AppUserDto AppUser { get; set; }
 
         // Address details
         public string Unit { get; set; }

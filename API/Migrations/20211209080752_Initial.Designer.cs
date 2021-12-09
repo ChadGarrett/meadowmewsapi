@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MeadowMewsApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20211202193538_Initial")]
+    [Migration("20211209080752_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -143,6 +143,9 @@ namespace MeadowMewsApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("TEXT");
 
@@ -156,6 +159,8 @@ namespace MeadowMewsApi.Migrations
                         .HasColumnType("REAL");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PropertyId");
 
                     b.ToTable("electricityPurchases");
                 });
@@ -326,6 +331,17 @@ namespace MeadowMewsApi.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("API.Entities.ElectricityPurchase", b =>
+                {
+                    b.HasOne("API.Entities.Property", "Property")
+                        .WithMany("ElectricityPurchases")
+                        .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Property");
+                });
+
             modelBuilder.Entity("API.Entities.Photo", b =>
                 {
                     b.HasOne("API.Entities.AppUser", "AppUser")
@@ -396,6 +412,11 @@ namespace MeadowMewsApi.Migrations
                     b.Navigation("Properties");
 
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("API.Entities.Property", b =>
+                {
+                    b.Navigation("ElectricityPurchases");
                 });
 #pragma warning restore 612, 618
         }

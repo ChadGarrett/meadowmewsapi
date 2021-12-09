@@ -29,7 +29,7 @@ namespace API.Controllers
         ///////////////
 
         [HttpGet("owned/{id}")]
-        public async Task<IEnumerable<Property>> GetOwnedProperties(int id)
+        public async Task<IEnumerable<PropertyDto>> GetOwnedProperties(int id)
         {
             var appUserId = User.GetUserId();
 
@@ -44,7 +44,7 @@ namespace API.Controllers
             return new PropertyDto
             {
                 Id = property.Id,
-                AppUserDto = _mapper.Map<AppUserDto>(property.AppUser),
+                AppUser = _mapper.Map<AppUserDto>(property.AppUser),
                 Unit = property.Unit,
                 ComplexName = property.ComplexName,
                 Street = property.Street,

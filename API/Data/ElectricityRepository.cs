@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using API.DTOs;
 using API.Entities;
 using API.Interfaces;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -9,9 +12,11 @@ namespace API.Data
     public class ElectricityRepository : IElectricityRepository
     {
         private readonly DataContext _context;
-        public ElectricityRepository(DataContext context)
+        private readonly IMapper _mapper;
+        public ElectricityRepository(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task AddPurchase(ElectricityPurchase purchase)
@@ -19,9 +24,13 @@ namespace API.Data
             await _context.electricityPurchases.AddAsync(purchase);
         }
 
-        public async Task<IEnumerable<ElectricityPurchase>> GetPurchases()
+        public async Task<IEnumerable<ElectricityPurchaseDto>> GetPurchases()
         {
-            return await _context.electricityPurchases.ToListAsync();
+            return await _context.electricityPurchases
+                .Include(p => p.Property)
+                .Include(p => p.Property.AppUser)
+                .ProjectTo<ElectricityPurchaseDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         public void UpdatePurchase(ElectricityPurchase purchase)

@@ -5,6 +5,9 @@ using API.Controllers;
 using API.Interfaces;
 using API.Entities;
 using Microsoft.AspNetCore.Authorization;
+using API.DTOs;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace API.Controllers
 {
@@ -12,15 +15,17 @@ namespace API.Controllers
     public class ElectricityController : BaseApiController
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public ElectricityController(IUnitOfWork unitOfWork)
+        public ElectricityController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         // GET: api/Electricity
         [HttpGet]
-        public async Task<IEnumerable<ElectricityPurchase>> GetStatements()
+        public async Task<IEnumerable<ElectricityPurchaseDto>> GetStatements()
         {
             return await _unitOfWork.electricityRepository.GetPurchases();
         }
@@ -42,13 +47,15 @@ namespace API.Controllers
         // POST: api/Electricity
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ElectricityPurchase>> AddPurchase(ElectricityPurchase electricityPurchase)
+        public async Task<ActionResult<ElectricityPurchase>> AddPurchase(AddElectricityDto electricityPurchase)
         {
-            await _unitOfWork.electricityRepository.AddPurchase(electricityPurchase);
+            var purchase = _mapper.Map<ElectricityPurchase>(electricityPurchase);
+            
+            await _unitOfWork.electricityRepository.AddPurchase(purchase);
 
             if (await _unitOfWork.Complete()) 
             {
-                return CreatedAtAction(nameof(GetStatement), new { id = electricityPurchase.Id }, electricityPurchase);
+                return CreatedAtAction(nameof(GetStatement), new { id = purchase.Id }, electricityPurchase);
             }
 
             return BadRequest("Failed to add a new Electricity Purchase");

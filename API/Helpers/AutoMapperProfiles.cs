@@ -18,6 +18,8 @@ namespace API.Helpers
             CreateMap<RegisterDto, AppUser>();
             CreateMap<Property, PropertyDto>();
             CreateMap<AppUser, AppUserDto>();
+            CreateMap<AddElectricityDto, ElectricityPurchase>();
+            CreateMap<ElectricityPurchase, ElectricityPurchaseDto>();
         }
     }
 }

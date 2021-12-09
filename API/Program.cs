@@ -30,7 +30,7 @@ namespace API
 
                 // Seed
                 await Seed.SeedUsers(userManager, roleManager);
-                await Seed.SeedElectricityPurchases(context);
+                //await Seed.SeedElectricityPurchases(context);
                 await Seed.SeedProperties(context);
             }
             catch (Exception ex)

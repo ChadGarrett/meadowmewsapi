@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.DTOs;
 using API.Entities;
 using API.Interfaces;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -11,9 +14,11 @@ namespace API.Data
     public class PropertyRepository : IPropertyRepository
     {
         private readonly DataContext _context;
-        public PropertyRepository(DataContext context)
+        private readonly IMapper _mapper;
+        public PropertyRepository(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task AddProperty(Property property)
@@ -26,10 +31,11 @@ namespace API.Data
             _context.properties.Remove(property);
         }
 
-        public async Task<IEnumerable<Property>> GetOwnedProperties(int id)
+        public async Task<IEnumerable<PropertyDto>> GetOwnedProperties(int id)
         {
             return await _context.properties
                 .Where(p => p.AppUserId == id)
+                .ProjectTo<PropertyDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 

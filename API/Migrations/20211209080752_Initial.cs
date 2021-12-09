@@ -53,22 +53,6 @@ namespace MeadowMewsApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "electricityPurchases",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    PurchaseDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    PurchasedBy = table.Column<string>(type: "TEXT", nullable: true),
-                    Units = table.Column<double>(type: "REAL", nullable: false),
-                    Value = table.Column<double>(type: "REAL", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_electricityPurchases", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -222,6 +206,29 @@ namespace MeadowMewsApi.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "electricityPurchases",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    PurchaseDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    PurchasedBy = table.Column<string>(type: "TEXT", nullable: true),
+                    Units = table.Column<double>(type: "REAL", nullable: false),
+                    Value = table.Column<double>(type: "REAL", nullable: false),
+                    PropertyId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_electricityPurchases", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_electricityPurchases_Properties_PropertyId",
+                        column: x => x.PropertyId,
+                        principalTable: "Properties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -260,6 +267,11 @@ namespace MeadowMewsApi.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_electricityPurchases_PropertyId",
+                table: "electricityPurchases",
+                column: "PropertyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Photos_AppUserId",
                 table: "Photos",
                 column: "AppUserId",
@@ -295,10 +307,10 @@ namespace MeadowMewsApi.Migrations
                 name: "Photos");
 
             migrationBuilder.DropTable(
-                name: "Properties");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "Properties");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

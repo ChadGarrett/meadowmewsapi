@@ -25,5 +25,6 @@ namespace API.Entities
         public string City { get; set; }
         public string Province { get; set; }
         public string PostalCode { get; set; }
+        public ICollection<ElectricityPurchase> ElectricityPurchases { get; set; }
     }
 }

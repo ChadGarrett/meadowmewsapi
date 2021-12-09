@@ -61,10 +61,7 @@ namespace API.Data
             var purchases = JsonSerializer.Deserialize<List<ElectricityPurchase>>(purchaseData);
             if (purchases == null) return;
 
-            foreach (var purchase in purchases)
-            {
-                await context.electricityPurchases.AddAsync(purchase);
-            }
+            await context.electricityPurchases.AddRangeAsync(purchases);
 
             await context.SaveChangesAsync();
         }

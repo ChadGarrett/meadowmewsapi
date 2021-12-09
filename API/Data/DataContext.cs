@@ -42,6 +42,12 @@ namespace API.Data
                 .WithOne(u => u.Role)
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
+
+            builder.Entity<Property>()
+                .HasMany(e => e.ElectricityPurchases)
+                .WithOne(p => p.Property)
+                .HasForeignKey(u => u.PropertyId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
