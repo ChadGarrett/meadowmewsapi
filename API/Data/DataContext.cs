@@ -43,6 +43,7 @@ namespace API.Data
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
 
+            // builder.Entity<ElectricityPurchase>().HasOne(e => e.Property).WithMany(o => o.ElectricityPurchases);
             builder.Entity<Property>()
                 .HasMany(e => e.ElectricityPurchases)
                 .WithOne(p => p.Property)
