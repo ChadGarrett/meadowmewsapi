@@ -31,6 +31,11 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
+            if (registerDto.Email.Count() == 0)
+            {
+                return BadRequest("Precondition failed: Email is required");
+            }
+            
             if (await UserExists(registerDto.Email))
             {
                 return BadRequest("Email already in use");
@@ -54,6 +59,7 @@ namespace API.Controllers
 
             return new UserDto
             {
+                Id = user.Id,
                 UserName = user.UserName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
@@ -83,6 +89,7 @@ namespace API.Controllers
 
             return new UserDto 
             {
+                Id = user.Id,
                 UserName = user.UserName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
